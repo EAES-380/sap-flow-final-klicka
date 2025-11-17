@@ -1,0 +1,16 @@
+---
+title: "Project proposal"
+author: "Team name"
+output: html_document
+---
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(broom)
+```
+
+## 1. Data
+
+## 2. Exploratory Visualization
+
+## 3. Possible question and method

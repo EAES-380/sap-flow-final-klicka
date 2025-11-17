@@ -1,0 +1,193 @@
+---
+title: "Final Project Instructions"
+output: 
+  html_document: 
+    css: project.css
+    theme: yeti 
+    fig_caption: true
+---
+
+# In a nutshell...
+
+Pick a dataset, any dataset...
+
+...
+and apply your data science workflow.
+
+Submit a proposal on **Friday 11/21**.
+
+Give 5 min presentation (or share pre-recording) on Monday, Dec. 8 8-10am (Finals week).
+
+Write-up a README executive summary by end-of-day Friday, Dec. 12.
+
+```{r setup, echo=FALSE, fig.align="left", out.width="40%"}
+knitr::include_graphics("img/data-science-cycle.001.png")
+```
+
+# Details
+
+## Everyone
+
+The final project will be your chance to apply the data science skills you've learned so far to a dataset of your choosing.
+
+If we relate this to the **data science workflow** you can see that means you'll be importing, tidying and transforming (wrangling), visualizing, and communicating your data.
+
+The last two units of the class will also cover how to **model** your data, including how to test hypotheses.
+
+Your final project will incorporate all these elements along with text narrative explaining your code and thought process in an **.Rmd** file, just like you've been doing all semester.
+
+## Undergraduates
+
+You will be assigned or choose (as a group) a dataset to work with based on your interests.
+
+**GOAL:**
+
+-   Apply the techniques we've learned in class (and beyond, if you like) to analyze a novel dataset.
+
+DO:
+
+-   Demonstrate your ability with different functions we've covered - Explore your data, first!
+-   Pose a reasonable question and answer that question with figures and data - Tell a story!
+-   Focus on quality not quantity!
+-   Critique your methods. How can you improve them?
+
+DO NOT DO:
+
+-   An exhaustive data analysis. That is, do not calculate every statistics or present every visualization possible.
+-   Do not visualize everything all at once. This helps YOU, but it doesn't necessarily help the audience.
+
+## Data
+
+Pick a manageable dataset.
+This means that the data should be readily accessible and large enough that multiple relationships can be explored.
+
+-   at least 50 observations (rows)
+-   at least 10 variables
+
+The dataset's variables should include categorical variables, discrete numerical variables, and continuous numerical variables.
+
+If you are using a dataset that comes in a format that we haven't encountered in class, make sure that you are able to load it into R as this can be tricky depending on the source.
+
+If you are having trouble ask for help before it is too late.
+
+**Note on reusing datasets from class:** Do not reuse datasets used in examples, homework assignments, or labs in the class.
+
+Use this link to review some dataset you could use, or feel free to explore other sources:
+
+[EAES 420 Final Project Datasets](https://docs.google.com/document/d/1gmjKcij2RO5s3MDmHSQtYWJqzjW4QGIZPQBRHj9PqMk/edit#)
+
+## Deliverables
+
+-   Proposal - **Due Monday April 15 at midnight**
+-   Presentation - **Tues, April 30 1030am - 1230pm**
+-   Executive summary - **Due end of finals week at midnight (Friday May 3)**
+
+### Proposal
+
+This is a draft of the introduction section of your project as well as a data analysis plan and your dataset.
+
+-   **Section 1a - Description of dataset:** The introduction should introduce your general
+
+    Where is the dataset coming from, what interests you about it, why did you choose it, what are its dimensions and variable names/types.
+    What is each row/observation?
+    Does the data seem 'tidy'?
+
+-   **Section 1b - Data and data dictionary:** Place your data in the \`/data\` folder, and add dimensions and data dictionary to the README in that folder.
+    Then print out the output of and data dictionary to the README in that folder.
+    Then print out the output of `glimpse()` or `skim()` of your data frame.
+
+-   **Section 2 - Exploratory visualization:**
+
+    -   Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data.
+
+-   **Section 3 - Pose a question and a potential method**
+
+    -   What question could you answer with this dataset?
+
+    -   The method(s) that you believe will be useful in answering your question(s).
+        (You can update these later as you work on your project.)
+
+The entire proposal should be about 1 page.
+You can use a "Print Preview" to view the size of the .Rmd html output.
+
+The grading scheme for the project proposal is as follows.
+Note that after you receive feedback for your proposal you can improve it based on the feedback and re-submit it.
+If you re-submit, your final score for the proposal will be the average of two scores you receive (first and second submission).
+
+| Total                                | 20 pts |
+|--------------------------------------|--------|
+| Data                                 | 6 pts  |
+| Proposal                             | 10 pts |
+| Workflow, organization, code quality | 2 pt   |
+| Teamwork                             | 2 pt   |
+
+### Presentation
+
+5 minutes maximum, and each team member should say something substantial (1 min each).
+
+You can either present live during your workshop or pre-record and submit your video to be played during the workshop.
+
+Prepare a slide deck using the template in your repo.
+This template uses a package called `xaringan`, and allows you to make presentation slides using R Markdown syntax.
+
+**DO NOT**: Your presentation should not just be an account of everything you tried ("then we did this, then we did this, etc."), instead it should convey what choices you made, and why, and what you found.
+
+Before you finalize your presentation, make sure any chunks you do not want to display are turned off with `echo = FALSE`.
+
+The presentation line-up will be generated randomly.
+
+I will let you know how the presentations will be graded closer to the date.
+
+### Executive summary
+
+Along with your presentation slides, we want you to provide a brief summary of your project in the README of your repository.
+
+This executive summary should provide information on the dataset you're using, your research question(s), your methodology, and your findings.
+
+The executive summary is worth 30 points and will be evaluated based on whether it follows guidance and whether it's concise but detailed enough.
+
+### Repo organization
+
+The following folders and files in your project repository:
+
+-   `presentation.Rmd` + `presentation.html`: Your presentation slides
+-   `README.Rmd` + `README.md`: Your write-up
+-   `/data`: Your dataset in CSV or RDS format and your data dictionary
+-   `/proposal`: Your project proposal
+
+Style and format does count for this assignment, so please take the time to make sure everything looks good and your data and code are properly formatted.
+
+## Tips
+
+-   You're working in the same repo as your teammates now, so merge conflicts will happen, issues will arise, and that's fine Commit and push often, and ask questions when stuck.
+
+-   Review the marking guidelines below and ask questions if any of the expectations are unclear.
+
+-   Make sure each team member is contributing, both in terms of quality and quantity of contribution (we will be reviewing commits from different team members).
+
+-   Set aside time to work together and apart (physically).
+
+-   When you're done, review the documents on GitHub to make sure you're happy with the final state of your work.
+    Then go get some rest!
+
+-   **Teamwork**: You are to complete the assignment as a team.
+    All team members are expected to contribute equally to the completion of this assignment and team evaluations will be given at its completion - anyone judged to not have sufficient contributed to the final product will have their grade penalized.\
+
+    While different teams members may have different backgrounds and abilities, it is the responsibility of every team member to understand how and why all code and approaches in the assignment works.
+
+## Marking
+
+| Total             | 100 pts |
+|-------------------|---------|
+| Proposal          | 20 pts  |
+| Presentation      | 50 pts  |
+| Executive summary | 30 pts  |
+
+### Criteria
+
+Your project will be assessed on the following criteria:
+
+-   **Content** - What is the quality of research and/or policy question and relevancy of data to those questions?
+-   **Accuracy** - Are statistical procedures carried out and explained correctly?
+-   **Writing and Presentation** - What is the quality of the statistical presentation, writing, and explanations?
+-   **Creativity and Critical Thought** - Is the project carefully thought out? Are the limitations carefully considered? Does it appear that time and effort went into the planning and implementation of the project?
