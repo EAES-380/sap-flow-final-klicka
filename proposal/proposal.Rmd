@@ -1,6 +1,6 @@
 ---
-title: "Project proposal"
-author: "Team name"
+title: "sap-flow"
+author: "Eli Chacko, Maggie Klicka, Jaymie Franco, Sandy Soleto"
 output: html_document
 ---
 
@@ -11,6 +11,17 @@ library(broom)
 
 ## 1. Data
 
+The dataset is coming from two different sap flow sights, one that is based in UIC(University of Illinois Chicago Greenhouse) and the other site is from Northwestern, (NU). However, both sites have different types of sap. The northwestern location has the following saps, x2oak, x2 maple. The UIC has the following saps, x2 american elm and a honey locust. It was interesting because I'm really interested when it comes to analyzing different ecosystems and being able to measure the different sap flow of different types of trees. There are 8 different columns and 49 different types of observations. The data is tidy, however there is a lot of data that will not be used in the final product, the only relevant ones are going to be Timestamp, Uncorrented Inner(cm/hr) and Uncorrected outer (cm/hr).
+
 ## 2. Exploratory Visualization
 
+Average amount of sap flow by an hour interval
+Which species has the highest/lowest sap flow rates
+Does location or species affect sap flow rates more 
+Does time play a factor for sap flow accumulation
+
 ## 3. Possible question and method
+
+We can answer questions about variation in sapflow between species of tree and their locations.
+This can be done through visualizing the data through graphs in Rstudio using glimpse (). Data wrangling in order to get rid of the unnecessary data will also be useful.
+
