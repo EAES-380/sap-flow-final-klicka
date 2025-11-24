@@ -7,20 +7,202 @@ output: html_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+library(readr)
 ```
+
+## GM GRADED: 17/20 - great work overall. Please see my more detailed comments below. I also combined your code with the narrative. I strongly encourage you to develop your *daily cycle* analysis further. It's strong, and different than the other hydro group's questions. Consider combining. monthly faceting, variability ranges (see below), and species groupings to nail the answer.
 
 ## 1. Data
 
-The dataset is coming from two different sap flow sights, one that is based in UIC(University of Illinois Chicago Greenhouse) and the other site is from Northwestern, (NU). However, both sites have different types of sap. The northwestern location has the following saps, x2oak, x2 maple. The UIC has the following saps, x2 american elm and a honey locust. It was interesting because I'm really interested when it comes to analyzing different ecosystems and being able to measure the different sap flow of different types of trees. There are 8 different columns and 49 different types of observations. The data is tidy, however there is a lot of data that will not be used in the final product, the only relevant ones are going to be Timestamp, Uncorrented Inner(cm/hr) and Uncorrected outer (cm/hr).
+### GM -2 great work overall, but there was some use of non-tidyverse functions (read.csv and rowMeans). I also always hope to see a clear statemnet of the number of rows and variables, and what each row (observation) corresponds to. I added your code below too from the other file. I imagine you had trouble reading your data from the `/data` folder. To do this from the proposal or presentation folders, you need to use a filepath of "../data" to go up one directory, before going down into the data directory.
+
+The dataset is coming from two different sap flow sites, one that is based in UIC (University of Illinois Chicago Greenhouse) and the other site is from Northwestern, (NU). However, both sites have different types of tree species. The northwestern location has the following saps: x2oak, x2 maple. The UIC has the following saps, x2 american elm and a honey locust. It was interesting because I'm really interested when it comes to analyzing different ecosystems and being able to measure the different sap flow of different types of trees. 
+
+There are 8 different columns and 3751 observations (rows) per dataset. The data is tidy, however there is a lot of data that will not be used in the final product, the only relevant ones are going to be Timestamp, Uncorrented Inner(cm/hr) and Uncorrected outer (cm/hr).
+
+```{r import-mutate-data}
+
+uic_elm_0b <-read_csv("../data/250801_251031_sx61na0b_uic_american_elm_sap_flow.csv")%>% ## remember to use read_csv (tidvyerse version of read.csv)
+  mutate(tree_species = "American elm", site = "UIC")
+
+uic_elm_0o <-read_csv("../data/250801_251031_sx61na0o_uic_american_elm_sap_flow.csv")%>%
+  mutate(tree_species = "American elm", site = "UIC") 
+
+uic_honeylocust <-read_csv("../data/250801_251031_sx61na0r_uic_honey_locust_sap_flow.csv")%>%
+  mutate(tree_species = "Honey locust", site = "UIC")
+
+nu_maple_0f <-read_csv("../data/250801_251031_sx61na0f_nu_maple_sap_flow.csv")%>%
+  mutate(tree_species = "Maple", site = "Northwestern") 
+
+nu_maple_0l <-read_csv("../data/250801_251031_sx61na0l_nu_maple_sap_flow.csv")%>%
+  mutate(tree_species = "Maple", site = "Northwestern") 
+
+nu_oak_0g <-read_csv("../data/250801_251031_sx61na0g_nu_oak_sap_flow.csv")%>%
+  mutate(tree_species = "Oak", site = "Northwestern") 
+
+nu_oak_07 <-read_csv("../data/250801_251031_sx61na07_nu_oak_sap_flow.csv")%>%
+  mutate(tree_species = "Oak", site = "Northwestern") 
+```
+
+
+Joining all of our data sets 
+```{r join-data, message = FALSE}
+sap_all_raw <- bind_rows(
+  uic_elm_0b,
+  uic_elm_0o,
+  uic_honeylocust,
+  nu_maple_0f,
+  nu_maple_0l,
+  nu_oak_0g,
+  nu_oak_07
+)
+```
+
+
+If we want to discuss sap flux, let's mutate our variables to produce a sap_flux variable. Also, I'm cleaning up some other variable names here. 
+```{r mutate-variable-names}
+sap_all <- sap_all_raw %>%
+  rename(
+    datetime = Timestamp,
+    inner = `uncorrected_inner (cm/hr)`, ## need to wrap these names with back ticks ` ` to identify names with .. in them
+    outer = `uncorrected_outer (cm/hr)`) %>%
+  mutate(
+    datetime = ymd_hms(datetime),
+
+    # calculate sap flux (cm/hr)
+    sap_flux = rowMeans(cbind(inner, outer), na.rm = TRUE),  ## here you should use `mutate(sap_flow = mean(inner, outer, na.rm = T))`
+
+    # time variables for analysis
+    date = as.Date(datetime),
+    hour = hour(datetime),
+    time = format(datetime, "%H:%M:%S"))
+```
+
+
+Here, I am selecting the variables that I want to show in our final wrangled data set "sap_all". 
+```{r select-variables}
+sap_all <- sap_all%>%
+  select(
+    date,
+    time,
+    hour,
+    site,
+    tree_species,
+    inner,
+    outer,
+    sap_flux
+  )
+```
+
+```{r gm-glimpse}
+glimpse(sap_all)
+```
 
 ## 2. Exploratory Visualization
 
-Average amount of sap flow by an hour interval
-Which species has the highest/lowest sap flow rates
-Does location or species affect sap flow rates more 
-Does time play a factor for sap flow accumulation
+### GM Great work. these exploratory visualizations are more than was requested (only 1-2 was fine) but they explore lots of good questions. I recommend you consider faceting my month for Q1 and calculating standard deviations alongside your summary means. You can then use geom_ribbon to define a grey variability range around each mean line. This allows you to assess differences more statistically. For your barplots, consider using boxplots or violin plots.
+
+
+Answering our first research question:
+"Average amount of sap flow by an hour interval"
+```{r avg-hrly-sap-flow-Q1}
+sap_hourly <- sap_all %>%
+  group_by(hour) %>%
+  summarize(mean_sap_flux = mean(sap_flux, na.rm = TRUE), .groups = "drop")
+
+ggplot(sap_hourly, aes(x = hour, y = mean_sap_flux)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Average sap flux by hour of day",
+    x = "Hour of day",
+    y = "Mean sap flux (cm/hr)"
+  ) +
+  theme_classic()
+```
+
+Answering our second research question:
+"Which species has the highest/lowest sap flow rates?"
+```{r}
+sap_hourly_species <- sap_all %>%
+  group_by(tree_species, hour) %>%
+  summarize(mean_sap_flux = mean(sap_flux, na.rm = TRUE), .groups = "drop")
+
+ggplot(sap_hourly_species, aes(x = hour, y = mean_sap_flux, color = tree_species)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Average sap flux by hour of day, by species",
+    x = "Hour of day",
+    y = "Mean sap flux (cm/hr)",
+    color = "Tree species"
+  ) +
+  theme_classic()
+```
+
+Answering our third research question:
+"What effects sap flow rates more, location or species?"
+
+Bar chart showing the average sap flow by site, UIC v Northwestern. 
+```{r site-effect-sap-rate}
+site_effect <- sap_all %>%
+  group_by(site) %>%
+  summarize(mean_flow = mean(sap_flux, na.rm = TRUE))
+ggplot(site_effect, aes(x = site, y = mean_flow, fill = site)) +
+  geom_col() +
+  labs(
+    title = "Mean Sap Flow by Site",
+    x = "Site",
+    y = "Mean Sap Flux (cm/hr)"
+  ) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+Bar chart showing the average sap flow by Tree Species.
+```{r species-effect-sap-rate}
+species_effect <- sap_all %>%
+  group_by(tree_species) %>%
+  summarize(mean_flow = mean(sap_flux, na.rm = TRUE))
+  
+ggplot(species_effect, aes(x = tree_species, y = mean_flow, fill = tree_species)) +
+  geom_col() +
+  labs(
+    title = "Mean Sap Flow by Tree Species",
+    x = "Tree Species",
+    y = "Mean Sap Flux (cm/hr)"
+  ) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+```
+
+
+Our final question:
+"Does time play a factor for sap flow accumulation"
+```{r }
+daily_flow <- sap_all %>%
+  group_by(tree_species, date) %>%
+  summarize(daily_total = sum(sap_flux, na.rm = TRUE), .groups = "drop")
+ggplot(daily_flow, aes(x = date, y = daily_total, color = tree_species)) +
+  geom_line(linewidth = 0.5) +
+  labs(
+    title = "Daily Sap Flow by Tree Species",
+    subtitle = "August 01 - October 31, 2025",
+    x = "Date",
+    y = "Daily Total Sap Flux (cm/hr)",
+    color = "Tree Species"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+    
+```
 
 ## 3. Possible question and method
+
+### GM -3 Nice job identifying a range of questions, however, the goal here was to carefully select one or two well-worded questions that you can definitely answer with the data, and to provide a detailed step-wise description of how you'll complete the work. Specific wrangling or alterations should be itemized. 
 
 We can answer questions about variation in sapflow between species of tree and their locations.
 This can be done through visualizing the data through graphs in Rstudio using glimpse (). Data wrangling in order to get rid of the unnecessary data will also be useful.
